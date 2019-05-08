@@ -11,7 +11,10 @@
     >
       <div class="text-xs-center">
         <logo />
-        <vuetify-logo />
+        <v-btn
+        :to="'/test/signin'"
+        nuxt
+        >Insprire</v-btn>
       </div>
     </v-flex>
   </v-layout>
@@ -19,12 +22,10 @@
 
 <script>
 import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
 export default {
   components: {
-    Logo,
-    VuetifyLogo
+    Logo
   }
 }
 </script>

@@ -4,7 +4,7 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
 
- if (!firebase.apps.length) {
+
    // Initialize Firebase
   const config = {
     apiKey: "AIzaSyA9ZLksXlLGpED31flJ7nqdfhvNkg5R0GM",
@@ -14,9 +14,9 @@ import 'firebase/storage'
     storageBucket: "alhero-x.appspot.com",
     messagingSenderId: "303753755152"
   };
-  firebase.initializeApp(config);
- }
-
+  
+ 
+ !firebase.apps.length ? firebase.initializeApp(config) : ''
  export const firestore = firebase.firestore();
  export const auth = firebase.auth();
  export const storage = firebase.storage();
