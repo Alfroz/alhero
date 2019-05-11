@@ -1,10 +1,35 @@
 <script>
+import NavBarRoutes from './nav-bar-routes'
+
 export default {
   name: 'NavBar',
+  components: {
+    NavBarRoutes
+  },
   data() {
     return {
       drawer: null,
-      mini: false
+      mini: false,
+      persistentNavRoutes: [
+        {
+          name: 'index',
+          title: 'Home',
+        }
+      ],
+      loggedInNavRoutes: [
+        {
+          name: 'auth-logout',
+          title: 'Logout',
+          icon: 'exit_to_app',
+        },
+      ],
+      loggedOutNavRoutes: [
+        {
+          name: 'auth-login',
+          title: 'Login',
+          icon: 'account_circle',
+        },
+      ]
     }
   }
 }
@@ -19,9 +44,9 @@ export default {
   app
   fixed
   right
-  width="240"
+  width="300"
   floating
-  class="blue-grey darken-4"
+  class="accent"
   >
     <v-list>
       <v-list-tile @click.stop="mini = !mini">
@@ -38,6 +63,11 @@ export default {
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
+
+    <NavBarRoutes :routes="persistentNavRoutes" />
+    <NavBarRoutes v-if="isAuthenticated" :routes="loggedInNavRoutes" />
+    <NavBarRoutes v-else :routes="loggedOutNavRoutes" />
+
   </v-navigation-drawer>
 
   <v-toolbar
@@ -45,18 +75,21 @@ export default {
   scroll-off-screen
   app
   flat
-  color="accent">
-    <v-toolbar-title>
-      <v-btn
-      flat
+  class="accent">
+    <v-toolbar-title 
+    color="transparent"
+    class="ma-0 pa-0">
+      <v-btn 
+      flat 
       icon
-      exact
-      class="ma-0 pa-0"
-      >
-        <v-icon>whatshot</v-icon>
+      color="transparent"
+      :to="{ name: 'index'}" 
+      class="pa-0 ma-0"
+      exact>
+        <v-icon class="white--text ">whatshot</v-icon>
       </v-btn>
+        <span class="hidden-xs-only">Title</span>
     </v-toolbar-title>
-
     <v-spacer></v-spacer>
     <v-toolbar-side-icon
     @click.stop="drawer = !drawer"

@@ -2,7 +2,7 @@
   <v-container
   fluid
   >
-    <h1 class="display-4"> Hello Every one</h1>
+    <h1 class="display-4"> Hello Every one {{ isAuthenticated ? 'Login' : 'Logout' }}</h1>
     <pre>{{ test }}</pre>
     <BaseLazyImg
     v-for="i in 1"

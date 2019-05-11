@@ -1,12 +1,15 @@
 <template>
-  <v-app dark>
-    <NavBar/>
+  <v-app
+  dark
+  class="accent"
+  >
+    <NavBar />
     <v-content>
       <v-container>
         <nuxt />
       </v-container>
     </v-content>
-    <Snackbar/>
+    <Snackbar />
   </v-app>
 </template>
 
@@ -21,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'Vuetify.js'
+      title: 'Vuetify.js',
     }
   }
 }

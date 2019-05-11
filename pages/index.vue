@@ -1,23 +1,23 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
+  <v-container
+  fill-height
   >
-    <v-flex
-      xs12
-      sm8
-      md6
+    <v-layout
+      column
+      justify-center
+      align-center
     >
-      <div class="text-xs-center">
-        <logo />
-        <v-btn
-        :to="'/test/signin'"
-        nuxt
-        >Insprire</v-btn>
-      </div>
-    </v-flex>
-  </v-layout>
+      <v-flex
+        xs12
+        sm8
+        md6
+      >
+        <div class="text-xs-center">
+          <logo />
+        </div>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

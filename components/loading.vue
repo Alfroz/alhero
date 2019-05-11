@@ -5,7 +5,7 @@
 <script>
 export default {
 	data: () => ({
-		loading: false
+			loading: false
 	}),
 
 	methods: {
@@ -21,21 +21,19 @@ export default {
 
 
 <style scoped>
-	/* Make clicks pass-through */
+/* Make clicks pass-through */
 #progress {
   pointer-events: none;
 }
 
 #progress .bar {
-  background: #29d;
-
+  background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
   position: fixed;
   z-index: 1031;
   top: 0;
   left: 0;
-
   width: 100%;
-  height: 2px;
+  height: 5px;
 }
 
 /* Fancy blur effect */
@@ -45,12 +43,12 @@ export default {
   right: 0px;
   width: 100px;
   height: 100%;
-  box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+  box-shadow: 0 0 10px #84fab0, 0 0 5px #8fd3f4;
   opacity: 1.0;
-
+  
   -webkit-transform: rotate(3deg) translate(0px, -4px);
-      -ms-transform: rotate(3deg) translate(0px, -4px);
-          transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
 }
 
 /* Remove these to get rid of the spinner */
@@ -58,25 +56,24 @@ export default {
   display: block;
   position: fixed;
   z-index: 1031;
-  top: 15px;
-  right: 15px;
+  bottom: 5%;
+  right: 5%;
 }
 
 #progress .spinner-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   box-sizing: border-box;
-
-  border: solid 2px transparent;
-  border-top-color: #29d;
-  border-left-color: #29d;
+  border: solid 3px transparent;
+  border-top-color: #8fd3f4;
+  border-left-color: #8fd3f4;
   border-radius: 50%;
-
+  
   -webkit-animation: progress-spinner 400ms linear infinite;
-          animation: progress-spinner 400ms linear infinite;
+  animation: progress-spinner 400ms linear infinite;
 }
 
-.nprogress-custom-parent {
+.progress-custom-parent {
   overflow: hidden;
   position: relative;
 }
@@ -94,5 +91,6 @@ export default {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 
 </style>

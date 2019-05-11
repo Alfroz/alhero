@@ -48,29 +48,29 @@ export const actions = {
     await auth.signOut()
 
     Cookies.remove('access_token');
-    commit('setUSER', null)
-    commit('saveUID', null)
+    commit('SET_USER', null)
+    commit('SAVE_UID', null)
   },
 
   saveUID({commit}, uid) {
     console.log('[STORE ACTIONS] - saveUID')
-    commit('saveUID', uid)
+    commit('SAVE_UID', uid)
   },
 
   setUSER({commit}, user) {
-    commit('setUSER', user)
+    commit('SET_USER', user)
 
   }
 
 }
 
 export const mutations = {
-  saveUID (state, uid) {
-    console.log('[STORE MUTATIONS] - saveUID:', uid)
+  SAVE_UID (state, uid) {
+    console.log('[STORE MUTATIONS] - SAVE_UID:', uid)
     state.uid = uid
   },
-  setUSER (state, user) {
-    console.log('[STORE MUTATIONS] - setUSER:', user)
+  SET_USER (state, user) {
+    console.log('[STORE MUTATIONS] - SET_USER:', user)
     state.user = user
   }
 }

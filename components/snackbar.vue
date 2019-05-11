@@ -19,8 +19,8 @@
       }
     }, // data
     created() {
-      this.$store.watch(state => state.snackbar.snackbar, () => {
-        const snackbarState = this.$store.state.snackbar.snackbar;
+      this.$store.watch(state => state.snackbar, () => {
+        const snackbarState = this.$store.state.snackbar;
 
         if(snackbarState.message) {
           this.showSnackbar = true;
@@ -42,12 +42,8 @@
     right
     :timeout="snackbar.timeout"
     >
-      <v-btn
-      dark
-      flat>
-        <v-icon>{{ snackbar.type ? icon[snackbar.type] : icon[snackbar.color] }}
+        <v-icon left small>{{ snackbar.type ? icon[snackbar.type] : icon[snackbar.color] }}
         </v-icon>
-      </v-btn>
       {{ snackbar.message }}
       <v-btn
         dark

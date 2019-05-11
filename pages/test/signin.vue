@@ -29,7 +29,7 @@ export default {
   },
  // middleware: ['handle-login-route'],
   methods: {
-    ...mapActions('user', [ 'login', 'logout' ]),
+    //...mapActions('user', [ 'login', 'logout' ]),
     submit () {
        auth.signInWithEmailAndPassword(this.email, this.password).then((firebaseUser) => {
         console.log('[Signin firebaseUser]'+ JSON.stringify(firebaseUser.user))
