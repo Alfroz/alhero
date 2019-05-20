@@ -1,8 +1,13 @@
 <template>
+
   <v-container
   fluid
-  >
-    <h1 class="display-4"> Hello Every one {{ isAuthenticated ? 'Login' : 'Logout' }}</h1>
+  > 
+    <BaseLazyWrapper :loading="loading">
+      <h2 class="display-2"> Hello Every one {{ isAuthenticated ? 'Login' : 'Logout' }}</h2>
+    </BaseLazyWrapper> 
+    <BaseTwitterHeadCard />
+    
     <pre>{{ test }}</pre>
     <BaseLazyImg
     v-for="i in 1"
@@ -15,13 +20,21 @@
 <script>
 import { firestore } from '@/plugins/firebase'
 export default {
+  name: 'TestPage',
+  head: {
+    title: 'Test Page',
+    meta: [
+      { hid: 'description', name: 'description', content: 'Test page description' }
+    ]
+  },
   data() {
     return {
-      test: ''
+      test: '',
+      loading: true,
     }
   },
   async asyncData({ app, params, error }) {
-    const ref = app.$firestore.collection('tests').doc('Sl08nS6hIIHZvsoSD5hX')
+    const ref = firestore.collection('tests').doc('Sl08nS6hIIHZvsoSD5hX')
 
     let snap
     try {
@@ -33,6 +46,11 @@ export default {
     return {
       test: snap.data()
     }
+  },
+
+  mounted() {
+    console.log('lifecyclehook Mounted')
+    setInterval( () => {(this.loading = false)}, 4000)
   }
 }
 </script>

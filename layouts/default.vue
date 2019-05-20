@@ -3,28 +3,31 @@
   dark
   class="accent"
   >
-    <NavBar />
+    <Navbar />
     <v-content>
       <v-container>
         <nuxt />
       </v-container>
     </v-content>
     <Snackbar />
+    <Footer />
   </v-app>
 </template>
 
 <script>
-import Snackbar from '~/components/snackbar';
-import NavBar from '~/components/nav-bar'
+import Snackbar from '~/components/TheSnackbar';
+import Navbar from '~/components/TheNavbar'
+import Footer from '~/components/TheFooter'
 
 export default {
   components: {
     Snackbar,
-    NavBar
+    Navbar,
+    Footer
   },
   data() {
     return {
-      title: 'Vuetify.js',
+      title: 'aLhero',
     }
   }
 }

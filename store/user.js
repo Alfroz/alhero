@@ -1,11 +1,17 @@
 import { auth } from '~/plugins/firebase'
 import Cookies from 'js-cookie'
 
+// =================================================
+// State
+// =================================================
 export const state = () => ({
   uid: null,
   user: null
 })
 
+// =================================================
+// Getters
+// =================================================
 export const getters = {
 
   uid(state) {
@@ -22,13 +28,15 @@ export const getters = {
   }
 }
 
+// =================================================
+// Actions
+// =================================================
 export const actions = {
 
   async login({dispatch, state}, user) {
-    console.log('[STORE ACTIONS] - login')
-    console.log('[STORE ACTIONS USER]'+ JSON.stringify(user.uid))
+    
     const token = await auth.currentUser.getIdToken(true)
-    console.log('[STORE ACTIONS Token]'+ token)
+    
     const userInfo = {
       name: user.displayName,
       email: user.email,
@@ -39,12 +47,17 @@ export const actions = {
     Cookies.set('access_token', token) // saving token in cookie for server rendering
     await dispatch('setUSER', userInfo)
     await dispatch('saveUID', userInfo.uid)
-    console.log('[STORE ACTIONS] - in login, response:', status)
+   
+   if (process.env.NODE_ENV === 'development') {
+    console.log('[STORE ACTIONS] - in login, response:', status);
+    // console.log('[STORE ACTIONS Token]'+ token);
+    // console.log('[STORE ACTIONS USER]'+ JSON.stringify(user.uid))
+  }
 
   },
 
   async logout({commit, dispatch}) {
-    console.log('[STORE ACTIONS] - logout')
+   // console.log('[STORE ACTIONS] - logout')
     await auth.signOut()
 
     Cookies.remove('access_token');
@@ -53,7 +66,6 @@ export const actions = {
   },
 
   saveUID({commit}, uid) {
-    console.log('[STORE ACTIONS] - saveUID')
     commit('SAVE_UID', uid)
   },
 
@@ -64,6 +76,9 @@ export const actions = {
 
 }
 
+// =================================================
+// Mutations
+// =================================================
 export const mutations = {
   SAVE_UID (state, uid) {
     console.log('[STORE MUTATIONS] - SAVE_UID:', uid)

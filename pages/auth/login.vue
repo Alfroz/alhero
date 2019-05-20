@@ -1,11 +1,11 @@
 <template>
   <v-container
-  fluid
   fill-height
   >
     <v-layout
-    align-center
+    column
     justify-center
+    align-center
     >
       <v-flex
       xs12
@@ -62,6 +62,8 @@
           <v-card-actions
           class="pt-3"
           >
+            <v-btn color="info" @click.prevent="fbGoogleLogin">Google
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn
             :loading="buttonLoader"
@@ -81,7 +83,7 @@
 import { auth, GoogleProvider} from '~/plugins/firebase.js'
 export default {
   name: "LOGIN",
-  middleware: ['handle-login-route'],
+  middleware: ['unauthenticated'],
   data()  {
     return {
       prevRoute: null,
@@ -113,7 +115,7 @@ export default {
             type: 'success',
             message: 'Login Success'
           }
-          console.info('firebase.user' + FirebaseUser.user)
+          // console.info('firebase.user' + FirebaseUser.user)
           this.$store.dispatch('addSnackbar', snackbar)
           this.login(FirebaseUser.user)
           this.$router.push('/')
@@ -129,6 +131,11 @@ export default {
           this.buttonLoader = false;
         })
       }
+    },
+    async fbGoogleLogin() {
+      const { user } = await auth.signInWithPopup(GoogleProvider)
+      await this.login(user)
+      this.$router.push('/')
     }
   }
 }

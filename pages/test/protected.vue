@@ -13,18 +13,26 @@
         All DB Users: {{ allusers }}
       </div>
     </div>
+    
   </section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   import { firestore } from '~/plugins/firebase'
+
+
+
   export default {
     layout: 'protected',
     data () {
       return {
         allusers: []
       }
+    },
+    components : {
+      Froala
+
     },
     computed: {
       ...mapGetters('user',[
