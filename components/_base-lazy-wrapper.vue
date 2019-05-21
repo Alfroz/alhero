@@ -1,5 +1,5 @@
 <script>
-import Spinner from './spinner'
+import Spinner from '~/components/Spinner';
 export default {
   functional: true,
   props: {

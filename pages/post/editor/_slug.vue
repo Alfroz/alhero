@@ -3,7 +3,7 @@
    <!--<h1 class="mb-5 title"><v-icon>notes</v-icon> {{ $route.params.slug ? 'Update' : 'Create' }} Post</h1>-->
 	  <v-form ref="postEditor" v-model.lazy="valid" lazy-validation class="font-weight-light">
 	    <v-flex xs12 sm12 md12>
-	      <v-text-field v-model.lazy="post.title" :rules="titleRules" class="display-2" placeholder="Title" full-width single-line required></v-text-field>
+	      <v-text-field v-model.lazy="post.title" :rules="titleRules" class="display-1" placeholder="Title" full-width single-line required></v-text-field>
 	    </v-flex>
 	    <v-flex xs12 sm12 md12>
 	      <v-layout v-if="post.featImage && validateImage(post.featImage)" row justify-center py-2 class="text-xs-center">
@@ -101,12 +101,11 @@ export default {
       let that = this
     	this.editor = await new FroalaEditor('#froala-editor',{
   		  events: {
-			      'initialized': function () {
-			      // Do something here.
-			      // this is the editor instance.
-			      this.html.set(that.post.body)
-			      console.log(this.post.body);
-			    }
+		      'initialized': function () {
+		      // Do something here.
+		      // this is the editor instance.
+		      this.html.set(that.post.body)
+		      }
 			  },
 			  theme: 'dark',
     		toolbarInline: true,
@@ -159,7 +158,7 @@ export default {
           .then((dataPost) => {
             
             console.log('dataPost ' + dataPost.id);
-            this.$router.replace({
+            this.$router.go({
               name: 'post-slug',
               params: { slug: dataPost.slug }
             });
