@@ -19,7 +19,7 @@ export default {
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+          '/css/roboto-material-icons.css'
       }
     ]
   },
@@ -27,7 +27,13 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: '~/components/loading.vue',
+  //loading: '~/components/loading.vue',
+  loading: {
+    color: '#3F51B5',
+    failedColor: '#e91e63',
+    height: '3px',
+    continuous: true,
+  },
 
   /*
   ** Global CSS

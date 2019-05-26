@@ -1,8 +1,7 @@
 <template>
   <v-container>
-    <h2 class="display-2 text-xs-center">{{ post.title }}</h2>
+    <h2 class="display-2 text-xs-center mb-3">{{ post.title }}</h2>
     <div v-html="post.body"></div>
-    <pre> {{ post }} </pre>
   </v-container>
 </template>
 
@@ -11,9 +10,11 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'PostDetails',
   props: {
+  
 
   },
   async fetch({store, app, error, params}) {
+    console.log('Fetch Trigered')
    await store.dispatch('post/fetchPost', params.slug).catch(err => error({ statusCode: 404 }))
   },
   head() {

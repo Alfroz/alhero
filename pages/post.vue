@@ -1,28 +1,51 @@
 <template>
   <section>
-    <v-container>
-      <h1 class="display-3">Post Section</h1>
-    </v-container>
     <v-container
     fill-height
-    fluid>
-      <nuxt-child v-bind="$props"/>
+    fluid
+    grid-list-md>
+      <v-layout row wrap>
+
+        <v-flex
+        xs12
+        sm3
+        md2>
+          <PostSideBar />
+        </v-flex>
+
+        <v-flex
+        xs12
+        sm8
+        md8>
+          <transition name="fade" mode="out-in">
+            <nuxt-child v-bind="$props"/>
+          </transition>
+        </v-flex>
+
+        <v-flex
+          xs12
+          sm12
+          md2>
+          <PostSideBar />
+        </v-flex>
+        
+      </v-layout>
     </v-container>
   </section>
 </template>
 
 <script>
+  import PostSideBar from '~/components/post/SideBar'
+
   export default {
     name: 'PostWrapper',
+    components: {
+      PostSideBar
+    },
     props: {
 
     },
-    head: {
-      title: '',
-      meta: [
-        { hid: 'description', name: 'description', content: '' }
-      ]
-    },
+
   }
 </script>
 

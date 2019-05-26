@@ -7,6 +7,7 @@
 	>
 		<v-list-tile
 		:to="{name: route.name}"
+		exact
 		>
 			<v-list-tile-action>
 				<v-icon>
@@ -31,7 +32,7 @@
 		props: {
 			routes: {
 				type: Array,
-				reqired: true,
+				required: true,
 			}
 		}
 	}

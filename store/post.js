@@ -32,9 +32,9 @@ function initialState() {
     },
 
     page: 1,
-    perPage: 10,
-    lastPostVisible: {},
-    nextPostVisible: Object,
+    perPage: 1,
+    lastVisiblePost: {},
+    nextPostVisible: {},
     comments: [],
     loadMore: true,
   }
@@ -52,13 +52,53 @@ export const state = initialState;
 // =================================================
 export const actions = {
 
-  // Create Post
+  // FETCH POSTS
+  async fetchPosts({state, commit}, [ queryArray, startAfter]) {
+    console.info('[ACTION] - FetchPosts')
+    console.info('[ACTION] - queryArray ' + queryArray)
+    startAfter ? console.info('[ACTION] - startAfter ' + startAfter) : ''
+
+    let queryRef = postsRef
+    .where(...queryArray)
+    .orderBy('createdAt', 'desc') ;
+
+    let snapshot = startAfter 
+    ? await queryRef
+      .startAfter(startAfter)
+      .limit(state.perPage)
+      .get()
+    : await queryRef
+      .limit(state.perPage)
+      .get()
+
+      if(snapshot.empty) {
+        console.info('FetchPosts - Empty Snapshot')
+        return 
+      }
+      let lastPost = await snapshot.docs[snapshot.docs.length-1];
+      lastPost = {...lastPost.data(),
+        id: lastPost.id}
+      
+
+      let posts = [];
+      for (const doc of snapshot.docs) {
+        console.log('DATA - ' + doc.data() )
+        let post = { ...doc.data(),
+          id: doc.id }
+          posts.push(post)
+      }
+
+      commit('SET_POSTS', posts )
+      commit('SET_LAST_POST', lastPost)
+  },
+
+  // CREATE POST
   async createPost ({state, dispatch, commit}, newPost) {
     try {
       await createNewDocument(firestore, 'posts', newPost)
       // set snackbar
       const snackbar = {
-        message: "Your post was added !" };
+        message: "Post Created !" };
       dispatch('addSnackbar',snackbar, {root: true})
 
       return newPost;
@@ -73,7 +113,7 @@ export const actions = {
     }
   },
 
-  // Update Post
+  // UPDATE POST
   async updatePost ({state, dispatch, commit}, newPost) {
     try {
       await updateDocument(firestore, 'posts',state.post.id, newPost)
@@ -88,15 +128,16 @@ export const actions = {
       catch(error) {
         const snackbar = {
           type: "error",
-          message: error,                };
+          message: error };
         dispatch('addSnackbar',snackbar, {root: true})
         throw error
       }
   },
 
+  // FETCH POST
   async fetchPost( {commit, dispatch, state},postSlug ){
 
-    // 2. Check if we've already fetched and cached the user.
+    // 1. Check if we've already fetched and cached the post.
     const matchedPost = state.cached_post.find((post) => post.slug === postSlug)
     if (matchedPost) {
       console.info('MatchedPost')
@@ -104,7 +145,7 @@ export const actions = {
       return Promise.resolve(matchedPost)
     }
 
-
+    // Query the database (Firestore)
     return postsRef.where('slug','==', postSlug).get()
       .then(docs => {
         
@@ -141,6 +182,19 @@ export const actions = {
 // Mutations
 // =================================================
 export const mutations = {
+  SET_POSTS(state, newPosts) {
+    //metode 1
+    newPosts.forEach((i) => {
+      state.posts.push(i)
+    })
+    // metode 2
+   // Object.assign(state.posts, newPosts)
+  },
+
+  SET_LAST_POST(state, lastVisiblePost) {
+    state.lastVisiblePost = lastVisiblePost
+  },
+
   CACHE_POST(state, newPost) {
     console.info('Caching Post')
     state.cached_post.push(newPost)
@@ -164,7 +218,7 @@ export const getters = {
   posts: state => state.posts,
   post: state => state.post,
   comments: state => state.comments,
-  lastPostVisible: state => state.lastPostVisible,
+  lastVisiblePost: state => state.lastVisiblePost,
   loadMore: state => state.loadMore
 
 }

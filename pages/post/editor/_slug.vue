@@ -2,26 +2,20 @@
 	<v-container fluid>
    <!--<h1 class="mb-5 title"><v-icon>notes</v-icon> {{ $route.params.slug ? 'Update' : 'Create' }} Post</h1>-->
 	  <v-form ref="postEditor" v-model.lazy="valid" lazy-validation class="font-weight-light">
+	  	
 	    <v-flex xs12 sm12 md12>
-	      <v-text-field v-model.lazy="post.title" :rules="titleRules" class="display-1" placeholder="Title" full-width single-line required></v-text-field>
+	      <v-text-field v-model.lazy="post.title" :rules="titleRules" class="display-1 mb-3" placeholder="Title" full-width single-line required></v-text-field>
 	    </v-flex>
-	    <v-flex xs12 sm12 md12>
-	      <v-layout v-if="post.featImage && validateImage(post.featImage)" row justify-center py-2 class="text-xs-center">
-	        <no-ssr max-width="400px" max-height="400px">
-	          <v-img :src="post.featImage"></v-img>
-	        </no-ssr>
-	      </v-layout>
-	      <v-text-field v-model.lazy="post.featImage" :rules="featImageRules" label="Featured image (optional)" placeholder="https://" full-width single-line></v-text-field>
-	    </v-flex>
+	    
 	    <!--<v-flex xs12 sm12 md12>
 	      <v-textarea  v-model.lazy="post.body" :rules="bodyRules" placeholder="Write here" full-width rows="5" required></v-textarea>
 	    </v-flex>-->
 	    <v-flex xs12 sm12 md12>
-	      <div id="froala-editor"></div>
+	      <div id="froala-editor" class="mb-3"></div>
 	    </v-flex>
 	    <v-divider></v-divider>
 	    <v-flex xs12 sm12 md12>
-	      <v-combobox v-model.lazy="post.tagsView" :items="items" :search-input.sync="search" hide-selected hint="Maximum 5 tags" placeholder="Tags" multiple persistent-hint full-with>
+	      <v-combobox class="mb-3" v-model.lazy="post.tagsView" :items="items" :search-input.sync="search" hide-selected hint="Maximum 5 tags" placeholder="Tags" multiple persistent-hint box>
 	        <template v-slot:selection="data">
 	          <v-chip close label :key="JSON.stringify(data.item)" :selected="data.selected" :disabled="data.disabled" class="v-chip--select-multi" @input="data.parent.selectItem(data.item)">
 	            <span>{{ data.item }}</span>
@@ -38,7 +32,14 @@
 	        </template>
 	      </v-combobox>
 	    </v-flex>
-	    <v-spacer></v-spacer>
+	    <v-flex xs12 sm12 md12>
+	      <v-layout v-if="post.featImage && validateImage(post.featImage)" row justify-center py-2 class="text-xs-center">
+	        <no-ssr max-width="400px" max-height="400px">
+	          <v-img :src="post.featImage"></v-img>
+	        </no-ssr>
+	      </v-layout>
+	      <v-text-field v-model.lazy="post.featImage" :rules="featImageRules" label="Featured image (optional)" placeholder="https://" box single-line></v-text-field>
+	    </v-flex>
 	    <v-btn :disabled="!valid" @click="setPost(post.slug)">Post</v-btn>
 	  </v-form>
 	</v-container>
@@ -53,7 +54,7 @@ import { tagify } from '~/filters/tagify'
 
 export default {
   name: 'PostEditor',
-  
+  middleware: ['authenticated'],
   filters: {
     slugify,
     tagify
@@ -158,7 +159,7 @@ export default {
           .then((dataPost) => {
             
             console.log('dataPost ' + dataPost.id);
-            this.$router.go({
+            this.$router.push({
               name: 'post-slug',
               params: { slug: dataPost.slug }
             });
@@ -244,12 +245,12 @@ export default {
   	  
   },
 
-  beforeDestroy() {
+  /*beforeDestroy() {
     //empty the Post
     console.info('beforeDestroy')
     this.$store.commit('post/SET_POST', {})
 
-  },
+  },*/
   /*beforeRouteUpdate(to, from, next) {
     console.info('beforeRouteUpdate')
     this.$store.commit('post/SET_POST', {})
