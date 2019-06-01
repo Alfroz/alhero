@@ -6,8 +6,9 @@
 	:key="i + 'navbar_routes' "
 	>
 		<v-list-tile
-		:to="{name: route.name}"
+		:to="route.to"
 		exact
+		nuxt
 		>
 			<v-list-tile-action>
 				<v-icon>

@@ -30,14 +30,19 @@
      console.log('Fetch Trigered')
      const queryArray = ['createdAt', '>', 0];
 
-     if(store.state.post.posts.length < 1) await store.dispatch('post/fetchPosts', [queryArray]).catch(err => error({ statusCode: 404 }))
+     if(store.state.post.posts.length < 1) 
+      await store.dispatch('post/fetchPosts', [queryArray]).catch(err => error({ statusCode: 404 }))
     },
     
 
     computed: {
-      ...mapGetters('post',[
+      /*...mapGetters('post',[
       'posts'
-      ]),
+      ]),*/
+    },
+
+    async beforeDestroy() {
+      await console.info('Index - beforeDestroy')
     },
 
   }

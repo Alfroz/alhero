@@ -2,12 +2,11 @@
   <v-container
     grid-list-xl
   >
-    <h5 class="caption font-weight-light">PostList {{queryArray}}</h5>
+    
     <v-layout wrap>
       <Card
       v-for="(post, i) in posts"
       :key="post.slug"
-      :size="layout[i]"
       :value="post"
       >
       </Card>
@@ -15,13 +14,14 @@
     <pre> {{ JSON.stringify(lastVisiblePost.title) }} </pre>
 
     <v-btn
-      color="blue-grey darken-4"
+      color="info darken-1"
       v-if="loadMore"
       :loading="buttonLoader"
       @click="addPosts(); buttonLoader = true">
         <v-icon left small>refresh</v-icon>
         Load...
     </v-btn>
+    <h5 class="caption font-weight-light">PostList {{queryArray}}</h5>
   </v-container>
 
 </template>
@@ -43,7 +43,6 @@ export default {
 
   data() {
     return {
-      layout: [2, 2, 1, 2, 2, 3, 3, 3, 3, 3, 3],
       buttonLoader: false,
     }
   },
@@ -58,13 +57,16 @@ export default {
 
   methods: {
     async addPosts() {
-      this.$store.dispatch('post/fetchPosts', [ this.queryArray, this.lastVisiblePost.createdAt ])
+      await this.$store.dispatch('post/fetchPosts', [ this.queryArray, this.lastVisiblePost.createdAt ])
       .then(() => {
-        this.buttonLoader = false;
       })
-      .catch(error => {
+     /* .catch(error => {
         console.error('Failed Access Store - fetchPosts')
-      })
+      }) */
+     
+      this.buttonLoader = false;
+  
+      
     }
   },
 

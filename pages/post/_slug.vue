@@ -14,7 +14,7 @@ export default {
 
   },
   async fetch({store, app, error, params}) {
-    console.log('Fetch Trigered')
+    console.log('Fetch Trigered post/_slug.vue')
    await store.dispatch('post/fetchPost', params.slug).catch(err => error({ statusCode: 404 }))
   },
   head() {
@@ -32,12 +32,12 @@ export default {
                   content: this.post.title,
               },
           ],
-          link: [
+         /* link: [
             { rel: 'stylesheet', 
-              href: 'https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1/css/froala_editor.pkgd.min.css',
+              href: '',
               type: 'text/css'
             }
-          ]
+          ] */
       }
   },
   computed: {

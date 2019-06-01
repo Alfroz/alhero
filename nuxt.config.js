@@ -27,13 +27,13 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  //loading: '~/components/loading.vue',
-  loading: {
-    color: '#3F51B5',
+  loading: '~/components/loading.vue',
+  /*loading: {
+    color: '#e91e63',
     failedColor: '#e91e63',
     height: '3px',
     continuous: true,
-  },
+  },*/
 
   /*
   ** Global CSS

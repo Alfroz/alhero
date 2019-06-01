@@ -10,7 +10,7 @@
     color="blue-grey darken-4"
     style="display: flex;
       flex-direction: column;
-      border-bottom: 3px solid;
+      border-bottom: 2px solid;
       border-image: linear-gradient(to right, #80d0c7 0%, #13547a 100%);
       border-image-slice: 1;"
     >
@@ -29,7 +29,9 @@
         </nuxt-link>
       </v-card-title>
 
-      </h3>
+      <v-card-text>
+        
+      </v-card-text>
     </v-card>
   </v-flex>
 </template>
@@ -41,7 +43,7 @@ export default {
   props: {
     size: {
       type: Number,
-      required: true
+      required: false
     },
     value: {
       type: Object,

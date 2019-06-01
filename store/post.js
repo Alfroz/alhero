@@ -32,7 +32,7 @@ function initialState() {
     },
 
     page: 1,
-    perPage: 1,
+    perPage: 5,
     lastVisiblePost: {},
     nextPostVisible: {},
     comments: [],
@@ -71,15 +71,18 @@ export const actions = {
       .limit(state.perPage)
       .get()
 
+      if(snapshot.docs.length < state.perPage) state.loadMore = false
+
       if(snapshot.empty) {
         console.info('FetchPosts - Empty Snapshot')
+        state.loadMore = false;
         return 
       }
+
       let lastPost = await snapshot.docs[snapshot.docs.length-1];
       lastPost = {...lastPost.data(),
         id: lastPost.id}
       
-
       let posts = [];
       for (const doc of snapshot.docs) {
         console.log('DATA - ' + doc.data() )
@@ -88,7 +91,15 @@ export const actions = {
           posts.push(post)
       }
 
-      commit('SET_POSTS', posts )
+      if(startAfter  !== undefined){
+        console.info('Update Post List')
+        commit('ADD_POSTS', posts )
+      } 
+      else {
+        console.info('Init Post List')
+        commit('SET_POSTS', posts )
+      }
+
       commit('SET_LAST_POST', lastPost)
   },
 
@@ -145,13 +156,13 @@ export const actions = {
       return Promise.resolve(matchedPost)
     }
 
-    // Query the database (Firestore)
+    //2. Query the database (Firestore)
     return postsRef.where('slug','==', postSlug).get()
       .then(docs => {
         
         if (docs.empty) {
-          console.log('No matching documents.' + docs );
-          return Promise.reject();
+          console.log('No matching documents. ' + docs );
+          return;
         }
 
         let post = {};
@@ -170,7 +181,7 @@ export const actions = {
         return Promise.resolve(post);
       })
       .catch(error => {
-        console.log('fetchPost catch' + error);
+        console.log('fetchPost catch ' + error);
         return Promise.reject()
       }) 
     
@@ -183,6 +194,11 @@ export const actions = {
 // =================================================
 export const mutations = {
   SET_POSTS(state, newPosts) {
+    state.posts = newPosts
+    //Object.assign(state.posts, newPosts)
+  },
+
+  ADD_POSTS(state, newPosts) {
     //metode 1
     newPosts.forEach((i) => {
       state.posts.push(i)
@@ -204,6 +220,8 @@ export const mutations = {
     console.info('MUTATION SET_POST - ' + newPost)
     state.post = newPost;
   },
+
+
 
 }
 

@@ -7,7 +7,7 @@
     app
     fixed
     right
-    width="300"
+    width="200"
     floating
     class="accent"
     >
@@ -21,7 +21,7 @@
             <v-list-tile-title
             class="font-weight-light"
             >
-              .minimize.
+              Menu
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -44,14 +44,13 @@
       class="ma-0 pa-0">
         <v-btn 
         flat 
-        icon
-        color="transparent"
+        
         :to="{ name: 'index'}" 
         class="pa-0 ma-0"
         exact>
-          <v-icon class="white--text ">whatshot</v-icon>
+          <span class="font-weight-bold teal--text text--lighten-2">al</span>
+          <span class="font-weight-regular">Hero</span>
         </v-btn>
-        <span class="hidden-xs-only">Title</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-side-icon
@@ -76,26 +75,26 @@ export default {
       mini: false,
       persistentNavRoutes: [
         {
-          name: 'index',
+          to: {name: 'index'},
           title: 'Home',
 
         },
         {
-          name: 'post',
+          to: {name: 'post'},
           title: 'Posts',
           icon: 'notes'
         }
       ],
       loggedInNavRoutes: [
         {
-          name: 'auth-logout',
+          to: {name: 'auth-logout'},
           title: 'Logout',
           icon: 'exit_to_app',
         },
       ],
       loggedOutNavRoutes: [
         {
-          name: 'auth-login',
+          to: {name: 'auth-login'},
           title: 'Login',
           icon: 'account_circle',
         },

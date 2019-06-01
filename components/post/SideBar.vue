@@ -1,12 +1,100 @@
 <template>
-	<v-container>
+	<v-responsive>
+    <v-btn
+      v-if="responsive"
+      class="default v-btn--simple"
+      dark
+      icon
+      @click.stop="sidebar = !sidebar"
+      >
+      <v-icon>notes</v-icon>
+    </v-btn>
+    <v-navigation-drawer
+      id="app-drawer"
+      v-model="sidebar"
+      :app="responsive"
+      dark
+      floating
+      width="200"
+      mobile-break-point="600"
+      :class="responsive ? 'blue-grey darken-4' : 'accent' "
+      >
+  <v-img
+    :src="image"
    
-  </v-container>
+  >
+    <v-list>
+    <v-list-tile>
+      <v-list-tile-action>
+        <v-icon>details</v-icon>
+      </v-list-tile-action>
+
+      <v-list-tile-content>
+        <v-list-tile-title>
+          <nuxt-link
+          :to="{name: 'post-editor-slug', params: {slug: 'new'}}"
+          no-prefetch
+          exact
+          >Create Post</nuxt-link>
+        </v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+  </v-list>
+
+    
+    
+  </v-img>
+</v-navigation-drawer>
+   
+</v-responsive>
 </template>
 
 <script>
+  import NavBarRoutes from '~/components/nav-bar-routes'
 	export default {
 		name: 'PostSideBar',
+    components: {
+      NavBarRoutes
+    },
+    data: () => ({
+      sidebar: null,
+      responsive: false,
+      image:'',
+      persistentNavRoutes: [
+        {
+          to: {name: 'post'},
+          title: 'Posts',
+          icon: 'notes'
+        }
+      ],
+      loggedInNavRoutes: [
+        {
+          to: {name: 'post-editor-slug', params: {slug: 'new'}},
+          title: 'Create',
+          icon: 'details',
+          attrs:'no-prefetch'
+        },
+      ],
+      
+    }),
+
+    mounted () {
+    this.onResponsiveInverted()
+    window.addEventListener('resize', this.onResponsiveInverted)
+    },
+    beforeDestroy () {
+      window.removeEventListener('resize', this.onResponsiveInverted)
+    },
+    methods: {
+      
+      onResponsiveInverted () {
+        if (window.innerWidth < 600) {
+          this.responsive = true
+        } else {
+          this.responsive = false
+        }
+      }
+    }
 
 	}
 </script> 

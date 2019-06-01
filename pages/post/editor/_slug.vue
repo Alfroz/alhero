@@ -1,6 +1,7 @@
 <template>
 	<v-container fluid>
    <!--<h1 class="mb-5 title"><v-icon>notes</v-icon> {{ $route.params.slug ? 'Update' : 'Create' }} Post</h1>-->
+
 	  <v-form ref="postEditor" v-model.lazy="valid" lazy-validation class="font-weight-light">
 	  	
 	    <v-flex xs12 sm12 md12>
@@ -11,7 +12,10 @@
 	      <v-textarea  v-model.lazy="post.body" :rules="bodyRules" placeholder="Write here" full-width rows="5" required></v-textarea>
 	    </v-flex>-->
 	    <v-flex xs12 sm12 md12>
-	      <div id="froala-editor" class="mb-3"></div>
+        <no-ssr>
+  	      <div id="froala-editor" class="mb-3"></div>
+        </no-ssr> 
+        
 	    </v-flex>
 	    <v-divider></v-divider>
 	    <v-flex xs12 sm12 md12>
@@ -41,7 +45,8 @@
 	      <v-text-field v-model.lazy="post.featImage" :rules="featImageRules" label="Featured image (optional)" placeholder="https://" box single-line></v-text-field>
 	    </v-flex>
 	    <v-btn :disabled="!valid" @click="setPost(post.slug)">Post</v-btn>
-	  </v-form>
+    
+	  </v-form>  
 	</v-container>
 </template>
 
@@ -52,6 +57,7 @@ import { tagify } from '~/filters/tagify'
 
 
 
+
 export default {
   name: 'PostEditor',
   middleware: ['authenticated'],
@@ -59,21 +65,13 @@ export default {
     slugify,
     tagify
   },
-  head() {
-  	return {
-      script: [
-        { src: 'https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1/js/froala_editor.pkgd.min.js',
-          type: 'text/javascript',
-          body: true 
-        }
-      ],
-      link: [
-        { rel: 'stylesheet', 
-          href: 'https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1/css/froala_editor.pkgd.min.css',
-          type: 'text/css'
-        }
-      ]
-  	}
+
+  props: {
+    slug: String
+  },
+
+  head: {
+      
   },
 
   data() {
@@ -97,24 +95,25 @@ export default {
     }
   }, // data
 
-  async beforeMount() {
+   async mounted() {
     // this.$parent.subTitle = this.page;
+    (function () {
       let that = this
-    	this.editor = await new FroalaEditor('#froala-editor',{
+    	this.editor = new FroalaEditor('#froala-editor',{
+        toolbarInline: true,
+        toolbarContainer: 'nav',
+        charCounterCount: false,
+        toolbarVisibleWithoutSelection: true,
   		  events: {
 		      'initialized': function () {
 		      // Do something here.
 		      // this is the editor instance.
+          console.info('Froala Initialized')
 		      this.html.set(that.post.body)
 		      }
-			  },
-			  theme: 'dark',
-    		toolbarInline: true,
-    		toolbarContainer: 'nav',
-		    charCounterCount: false,
-		    toolbarVisibleWithoutSelection: true,
-		    placeholderText: 'Type here'
-        }) 
+			  }    		
+      })
+    })()
   }, // computed
 
 
@@ -229,7 +228,7 @@ export default {
   	const currentSlug = params.slug;
   	
 
-  	if (currentSlug && currentSlug !== undefined) {
+  	if (currentSlug && currentSlug !== 'new') {
   		console.log('currentSlug' + currentSlug)
 			await store.dispatch('post/fetchPost', currentSlug)
 			.then((post) => {
@@ -247,8 +246,9 @@ export default {
 
   /*beforeDestroy() {
     //empty the Post
+    if(this.editor) this.editor.destroy
     console.info('beforeDestroy')
-    this.$store.commit('post/SET_POST', {})
+    //this.$store.commit('post/SET_POST', {})
 
   },*/
   /*beforeRouteUpdate(to, from, next) {

@@ -9,14 +9,16 @@
         <v-flex
         xs12
         sm3
-        md2>
+        md2
+        lg2>
           <PostSideBar />
         </v-flex>
 
         <v-flex
         xs12
-        sm8
-        md8>
+        sm9
+        md8
+        lg8>
           <transition name="fade" mode="out-in">
             <nuxt-child v-bind="$props"/>
           </transition>
@@ -25,8 +27,9 @@
         <v-flex
           xs12
           sm12
-          md2>
-          <PostSideBar />
+          md2
+          lg2>
+          
         </v-flex>
         
       </v-layout>
