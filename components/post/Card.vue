@@ -4,14 +4,13 @@
     :class="classes">
 
     <v-card
-    tile
     flat
-    class="elevation-10"
+    class="elevation-5"
     color="blue-grey darken-4"
     style="display: flex;
       flex-direction: column;
       border-bottom: 2px solid;
-      border-image: linear-gradient(to right, #80d0c7 0%, #13547a 100%);
+      border-image: linear-gradient(to top, #80d0c7 0%, #13547a 100%);
       border-image-slice: 1;"
     >
       <v-card-title>

@@ -21,28 +21,8 @@
       >
   <v-img
     :src="image"
-   
   >
-    <v-list>
-    <v-list-tile>
-      <v-list-tile-action>
-        <v-icon>details</v-icon>
-      </v-list-tile-action>
-
-      <v-list-tile-content>
-        <v-list-tile-title>
-          <nuxt-link
-          :to="{name: 'post-editor-slug', params: {slug: 'new'}}"
-          no-prefetch
-          exact
-          >Create Post</nuxt-link>
-        </v-list-tile-title>
-      </v-list-tile-content>
-    </v-list-tile>
-  </v-list>
-
-    
-    
+    <NavBarRoutes v-if="isAuthenticated" :routes="loggedInNavRoutes" />
   </v-img>
 </v-navigation-drawer>
    
@@ -72,7 +52,6 @@
           to: {name: 'post-editor-slug', params: {slug: 'new'}},
           title: 'Create',
           icon: 'details',
-          attrs:'no-prefetch'
         },
       ],
       

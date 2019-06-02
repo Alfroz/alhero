@@ -12,9 +12,9 @@
 	      <v-textarea  v-model.lazy="post.body" :rules="bodyRules" placeholder="Write here" full-width rows="5" required></v-textarea>
 	    </v-flex>-->
 	    <v-flex xs12 sm12 md12>
-        <no-ssr>
+        
   	      <div id="froala-editor" class="mb-3"></div>
-        </no-ssr> 
+        
         
 	    </v-flex>
 	    <v-divider></v-divider>
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapGetters } from 'vuex'
 import { slugify } from '~/filters/slugify'
 import { tagify } from '~/filters/tagify'
@@ -71,7 +72,21 @@ export default {
   },
 
   head: {
-      
+    script: [
+      { src: '/froala-editor/js/plugins.pkgd.min.js',
+        type: 'text/javascript',
+      }
+    ],
+    link: [
+      { rel: 'stylesheet', 
+        href: '/froala-editor/css/froala_editor.pkgd.min.css',
+        type: 'text/css'
+      },
+      { rel: 'stylesheet', 
+        href: '/froala-editor/css/themes/dark.min.css',
+        type: 'text/css'
+      }
+    ]   
   },
 
   data() {
@@ -95,26 +110,10 @@ export default {
     }
   }, // data
 
-   async mounted() {
-    // this.$parent.subTitle = this.page;
-    (function () {
-      let that = this
-    	this.editor = new FroalaEditor('#froala-editor',{
-        toolbarInline: true,
-        toolbarContainer: 'nav',
-        charCounterCount: false,
-        toolbarVisibleWithoutSelection: true,
-  		  events: {
-		      'initialized': function () {
-		      // Do something here.
-		      // this is the editor instance.
-          console.info('Froala Initialized')
-		      this.html.set(that.post.body)
-		      }
-			  }    		
-      })
-    })()
-  }, // computed
+  mounted() {
+       this.myEditor();
+   
+  }, // mounted
 
 
   watch: {
@@ -130,6 +129,30 @@ export default {
       'createPost',
       'updatePost'
     ]),
+
+    async myEditor() {
+      
+       
+        let that = this
+        this.editor = await new FroalaEditor('div#froala-editor',{
+          theme: 'dark',
+          toolbarInline: true,
+          charCounterCount: false,
+          toolbarVisibleWithoutSelection: true,
+          initOnClick: true,
+          events: {
+            'initialized': function () {
+            // Do something here.
+            // this is the editor instance.
+            console.info('Froala Initialized')
+            this.html.set(that.post.body)
+            this.events.focus()
+            }
+          }       
+        })
+      
+    },
+
     async setPost(slug) {
       if (this.$refs.postEditor.validate()) {
 
@@ -230,6 +253,7 @@ export default {
 
   	if (currentSlug && currentSlug !== 'new') {
   		console.log('currentSlug' + currentSlug)
+      await store.commit('post/SET_POST', {})
 			await store.dispatch('post/fetchPost', currentSlug)
 			.then((post) => {
 				this.post = post;
@@ -251,11 +275,11 @@ export default {
     //this.$store.commit('post/SET_POST', {})
 
   },*/
-  /*beforeRouteUpdate(to, from, next) {
+  async beforeRouteUpdate(to, from, next) {
     console.info('beforeRouteUpdate')
-    this.$store.commit('post/SET_POST', {})
+    await this.$store.commit('post/SET_POST', {})
     next();
-  },*/
+  },
 }
 
 </script>

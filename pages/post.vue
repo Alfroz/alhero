@@ -48,6 +48,14 @@
     props: {
 
     },
+    head: {
+      script: [
+        { 
+          src: '/froala-editor/js/froala_editor.min.js',
+          type: 'text/javascript',
+        }
+      ]
+    }
 
   }
 </script>
