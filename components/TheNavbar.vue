@@ -34,10 +34,12 @@
     </v-navigation-drawer>
 
     <v-toolbar
+    app
     dark
     scroll-off-screen
-    app
     flat
+    dense
+    clipped-left
     class="accent">
       <v-toolbar-title 
       color="transparent"
@@ -75,28 +77,23 @@ export default {
       mini: false,
       persistentNavRoutes: [
         {
-          to: {name: 'index'},
-          title: 'Home',
-
-        },
-        {
           to: {name: 'post'},
           title: 'Posts',
-          icon: 'notes'
+          icon: 'fas fa-file-alt'
         }
       ],
       loggedInNavRoutes: [
         {
           to: {name: 'auth-logout'},
           title: 'Logout',
-          icon: 'exit_to_app',
+          icon: 'fas fa-sign-out-alt',
         },
       ],
       loggedOutNavRoutes: [
         {
           to: {name: 'auth-login'},
           title: 'Login',
-          icon: 'account_circle',
+          icon: 'fas fa-sign-in-alt',
         },
       ]
     }

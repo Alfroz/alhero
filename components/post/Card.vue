@@ -1,19 +1,43 @@
 <template>
 	<v-flex
+    xs12 
     xs12
-    :class="classes">
-
+    md6
+    lg4
+    :class="classes"
+    d-flex>
+    <v-hover>
     <v-card
     flat
-    class="elevation-5"
-    color="blue-grey darken-4"
+    color="blue-grey darken-3"
+    slot-scope="{ hover }"
     style="display: flex;
       flex-direction: column;
       border-bottom: 2px solid;
-      border-image: linear-gradient(to top, #80d0c7 0%, #13547a 100%);
+      border-image: linear-gradient(to right, #80d0c7 0%, #13547a 100%);
       border-image-slice: 1;"
     >
-      <v-card-title>
+      <v-card-actions>
+        <v-expand-transition>
+          <v-btn
+            v-if="hover"
+            flat
+            icon
+            class="transition-fast-in-fast-out"
+            style="position: absolute; right: 5px; top: 5px;z-index: 10"
+            >
+            <v-icon class="white--text">far fa-bookmark</v-icon>
+          </v-btn>
+        </v-expand-transition>
+      </v-card-actions>    
+      <BaseLazyImg
+      v-if="value.featImage"
+      :src="value.featImage "
+      max-height="200"
+        />
+      <v-card-title class="grow">
+        <div>
+        <div class="headline font-weight-regular">
        <nuxt-link
         exact
         :to="{
@@ -22,20 +46,39 @@
         }"
         style="text-decoration: none">
           <span 
-          class="title px-0 font-weight-light white--text">  
+          class="white--text">  
             {{ value.title }}
           </span>
         </nuxt-link>
+      </div>
+      <div>
+        <span class="caption font-weight-thin text--darken-2">
+          {{ value.createdAt | date() }}
+        </span>
+      </div>
+      </div>
       </v-card-title>
 
       <v-card-text>
-        
+        <v-chip
+        v-for="(tag, i) of value.tagsView"
+        :key="i"
+        label
+        small
+        color="transparent"
+        @click="toPostsByTag(tag)"
+        >
+          {{ tag }}
+        </v-chip>
       </v-card-text>
+
     </v-card>
+  </v-hover>
   </v-flex>
 </template>
 
 <script>
+import date from '~/filters/date'
 export default {
   name: 'PostCard',
 
@@ -47,6 +90,14 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    }
+  },
+  filters:{
+    date
+  },
+  methods: {
+    toPostsByTag(tag) {
+      this.$router.push({name: 'post-tags-id', params: {id: tag}})
     }
   },
 

@@ -62,15 +62,14 @@
           <v-card-actions
           class="pt-3"
           >
-            <v-btn color="info" @click.prevent="fbGoogleLogin">Google
+            <v-btn color="indigo darken-2" @click.prevent="fbGoogleLogin"><v-icon>fab fa-google</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
             :loading="buttonLoader"
             color="primary"
             :disabled="!valid"
-            @click="submit(); buttonLoader = true">
-              LOGIN
+            @click="submit(); buttonLoader = true"><v-icon>fas fa-sign-in-alt</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>

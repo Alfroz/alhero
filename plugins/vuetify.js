@@ -1,3 +1,4 @@
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import colors from 'vuetify/es5/util/colors'
@@ -11,6 +12,7 @@ const themeCache = new LRU({
 */
 
 Vue.use(Vuetify, {
+  iconfont: 'fa',
   theme: {
     primary: "#009688", // teal
     secondary: "#e91e63", //pink

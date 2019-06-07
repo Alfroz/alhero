@@ -1,9 +1,11 @@
 <template>
   <v-container
-    grid-list-xl
+  fluid
+  grid-list-lg
+  pa-0
   >
     
-    <v-layout wrap>
+    <v-layout row wrap>
       <Card
       v-for="(post, i) in posts"
       :key="post.slug"
@@ -14,14 +16,15 @@
     <pre> {{ JSON.stringify(lastVisiblePost.title) }} </pre>
 
     <v-btn
-      color="info darken-1"
+      small
+      color="secondary"
       v-if="loadMore"
       :loading="buttonLoader"
       @click="addPosts(); buttonLoader = true">
-        <v-icon left small>refresh</v-icon>
-        Load...
+        <v-icon small left>fas fa-sync-alt</v-icon>
+        Loadmore
     </v-btn>
-    <h5 class="caption font-weight-light">PostList {{queryArray}}</h5>
+    
   </v-container>
 
 </template>

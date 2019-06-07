@@ -5,7 +5,7 @@
   >
     <Navbar />
     <v-content>
-      <v-container fluid>
+      <v-container fluid mb-5>
         <nuxt />
       </v-container>
     </v-content>

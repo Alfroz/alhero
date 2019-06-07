@@ -1,8 +1,10 @@
 <template>
-  <v-container>
-    <h2 class="display-2 text-xs-center mb-3">{{ post.title }}</h2>
+  <article>
+    <h1 class="display-1 text-xs-center mb-3">{{ post.title }}</h1>
+    <v-container>
     <div v-html="post.body"></div>
-  </v-container>
+    </v-container>
+  </article>
 </template>
 
 <script>
@@ -14,7 +16,6 @@ export default {
 
   },
   async fetch({store, app, error, params}) {
-    console.log('Fetch Trigered post/_slug.vue')
    await store.dispatch('post/fetchPost', params.slug).catch(err => error({ statusCode: 404 }))
   },
   head() {
@@ -32,12 +33,6 @@ export default {
                   content: this.post.title,
               },
           ],
-         /* link: [
-            { rel: 'stylesheet', 
-              href: '',
-              type: 'text/css'
-            }
-          ] */
       }
   },
   computed: {

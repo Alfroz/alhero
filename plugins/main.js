@@ -18,4 +18,8 @@ const authMixin = {
 	}
 }
 
+// Justinone vue-awesome
+import FaIcon from 'vue-awesome/components/Icon'
+
+Vue.component('v-faicon', FaIcon)
 Vue.mixin(authMixin);

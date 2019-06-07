@@ -1,8 +1,7 @@
 <template>
-  <v-container>
-    Posts - index
+  <section>
     <PostList :queryArray="queryArray"></PostList>
-  </v-container>
+  </section>
 </template>
 
 <script>
@@ -30,7 +29,7 @@
      console.log('Fetch Trigered')
      const queryArray = ['createdAt', '>', 0];
 
-     if(store.state.post.posts.length < 1) 
+    // if(store.state.post.posts.length < 1) 
       await store.dispatch('post/fetchPosts', [queryArray]).catch(err => error({ statusCode: 404 }))
     },
     

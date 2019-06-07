@@ -1,49 +1,43 @@
 <template>
-  <section>
-    <v-container
-    fill-height
-    fluid
-    grid-list-md>
-      <v-layout row wrap>
-
-        <v-flex
-        xs12
-        sm3
-        md2
-        lg2>
-          <PostSideBar />
-        </v-flex>
-
-        <v-flex
-        xs12
-        sm9
-        md8
-        lg8>
-          <transition name="fade" mode="out-in">
-            <nuxt-child v-bind="$props"/>
-          </transition>
-        </v-flex>
-
-        <v-flex
+    <v-template>
+      <PostLeftSideBar />
+      <v-container
+      fill-height
+      fluid
+      grid-list-sm
+      pa-0>
+      
+        <v-layout row wrap>
+          <v-flex
           xs12
           sm12
-          md2
-          lg2>
+          md9
+          lg10
+          >
+            <transition name="fade" mode="out-in">
+              <nuxt-child v-bind="$props"/>
+            </transition>
+          </v-flex>
+
+          <v-flex
+            xs12
+            sm12
+            md3
+            lg2>
+          </v-flex>
           
-        </v-flex>
-        
-      </v-layout>
-    </v-container>
-  </section>
+        </v-layout>
+      </v-container>
+    </v-template>
 </template>
 
 <script>
-  import PostSideBar from '~/components/post/SideBar'
+  import PostLeftSideBar from '~/components/post/LeftSideBar'
 
   export default {
     name: 'PostWrapper',
     components: {
-      PostSideBar
+      PostLeftSideBar
     },
     props: {
 
@@ -53,6 +47,7 @@
         { 
           src: '/froala-editor/js/froala_editor.min.js',
           type: 'text/javascript',
+          async: true
         }
       ]
     }

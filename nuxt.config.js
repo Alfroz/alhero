@@ -27,13 +27,13 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: '~/components/loading.vue',
-  /*loading: {
-    color: '#e91e63',
+  //loading: '~/components/loading.vue',
+  loading: {
+    color: '#009688',
     failedColor: '#e91e63',
     height: '3px',
     continuous: true,
-  },*/
+  },
 
   /*
   ** Global CSS
@@ -71,7 +71,7 @@ export default {
   ** Build configuration
   */
   build: {
-    transpile: ['vuetify/lib'],
+    transpile: ['vuetify/lib', /^vue-awesome/],
     plugins: [new VuetifyLoaderPlugin()],
     loaders: {
       stylus: {

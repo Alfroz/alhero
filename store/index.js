@@ -1,4 +1,4 @@
-import {getUserFromCookie, getUserFromSession} from '@/helpers/firebase'
+import {getUserFromCookie, getUserFromSession} from '@/helpers/firebaseAuth'
 export const strict = false;
 
 // =================================================
