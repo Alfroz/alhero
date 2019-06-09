@@ -15,14 +15,14 @@
       
       <v-flex xs12 sm12 md12>
         <div id="editor-wrapper" class="mb-5" style="min-height: 200px">
-          <div id="froala-editor" class=""></div>
+          <div id="summernote"></div>
         </div>
 
       </v-flex>
       
       
       <v-flex xs12 sm5>
-        <v-combobox class="mb-3" v-model.lazy="post.tagsView" :items="items" :search-input.sync="search" hide-selected hint="Maximum 5 tags" placeholder="Tags" multiple persistent-hint box>
+        <v-combobox class="mb-3" v-model.lazy="post.tagsView" :items="items" :search-input.sync="search" hide-selected hint="Maximum 5 tags" placeholder="Tags" multiple persistent-hint box cache-items browser-autocomplete="on">
           <template v-slot:selection="data">
             <v-chip close label :key="JSON.stringify(data.item)" :selected="data.selected" :disabled="data.disabled" class="v-chip--select-multi" @input="data.parent.selectItem(data.item)">
               <span>{{ data.item }}</span>
@@ -46,7 +46,7 @@
             <v-img :src="post.featImage"></v-img>
           </no-ssr>
         </div>
-        <v-text-field v-model.lazy="post.featImage" :rules="featImageRules" label="Featured image (optional)" placeholder="https://" box single-line></v-text-field>
+        <v-text-field v-model.lazy="post.featImage"  label="Featured image (optional)" placeholder="https://" box single-line></v-text-field>
       </v-flex>
       
       
@@ -74,15 +74,16 @@ export default {
   head: {
     script: [
       { 
-        src: '/froala-editor/js/plugins.pkgd.min.js',
+        src: '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js',
         type: 'text/javascript',
-        async: true,
-        preload: true
+        body: true,
+        onload:
+            'var event = new Event("scriptLoad");document.dispatchEvent(event);'
       }
     ],
     link: [
       { rel: 'stylesheet', 
-        href: '/froala-editor/css/froala_editor.pkgd.min.css',
+        href: '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css',
         type: 'text/css'
       },
     ]   
@@ -101,7 +102,6 @@ export default {
     return {
       valid: false,
       editor: false,
-      editor: null,
       titleRules: [
         v => !!v || 'Title is required',
         v => v && v.length >= 5 || 'Field must be grater than 5 characters'
@@ -113,16 +113,21 @@ export default {
       featImageRules: [
        // v => v !== null && this.validateImage(v) || 'Invalid image URL'
       ],
-      items: ['Gaming', 'Programming', 'Vue'],
+      items: ['Note','To-do','Memo'],
       search: null
     }
   }, // data
 
-  mounted() {
-       this.myEditor();
-   
-  }, // mounted
+  beforeMount() {
+    document.addEventListener("scriptLoad", this.onScriptLoad, { passive: true });
+  },
 
+  mounted() { 
+   this.myEditor()
+  }, // mounted
+  updated() {
+
+  },
 
   watch: {
     tags(val) {
@@ -137,11 +142,38 @@ export default {
       'createPost',
       'updatePost'
     ]),
+    onScriptLoad() {
+      document.removeEventListener("scriptLoad", this.onScriptLoad);
+      console.log(window.summernote);
+      this.myEditor()
+    },
 
-    async myEditor() {
-      
+     myEditor() {
+      if(!process.server && window.$) {
+        this.editor = $('#summernote').summernote({
+          airMode: true,
+          popover: {
+            air: [
+              ['color', ['color']],
+              ['font', ['bold', 'underline', 'clear']]
+            ]
+          },
+          placeholder: 'Hello stand alone ui',
+          tabsize: 2,
+          height: 100,
+          toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+          ]
+        });
+      }
        
-        let that = this
+        /*let that = this
         this.editor =  new FroalaEditor('#froala-editor',{
           theme: 'dark',
           toolbarInline: true,
@@ -155,7 +187,7 @@ export default {
             this.html.set(that.post.body)
             }
           }       
-        })
+        })*/
       
     },
 
@@ -170,7 +202,7 @@ export default {
             body: this.editor.html.get(),
 
            // body: this.post.body || '',
-            slug: this.post.title ? slugify(this.post.title) + '-' + this.slugPrefix() : '',
+            slug: this.post.slug ? this.post.slug : slugify(this.post.title) + '-' + this.slugPrefix(),
             featImage: this.post.featImage || null,
             createdAt: this.post.createdAt || new Date().getTime(),
             updatedAt: new Date().getTime(),

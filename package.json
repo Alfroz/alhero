@@ -21,6 +21,7 @@
     "jwt-decode": "^2.2.0",
     "nuxt": "^2.8.0",
     "vue-awesome": "^3.5.3",
+    "vue-trumbowyg": "^3.4.2",
     "vuetify": "^1.5.5",
     "vuetify-loader": "^1.2.1"
   },

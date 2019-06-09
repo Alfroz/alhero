@@ -12,7 +12,7 @@
     },
     data() {
       return {
-        placeHolder: '',
+        placeHolder: '/images/ph.png',
         observer: null,
         intersected: false,
       }

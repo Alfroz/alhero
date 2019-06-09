@@ -1,12 +1,10 @@
 <template>
-    <v-template>
-      <PostLeftSideBar />
-      <v-container
+    <v-container
       fill-height
       fluid
       grid-list-sm
       pa-0>
-      
+      <PostLeftSideBar />
         <v-layout row wrap>
           <v-flex
           xs12
@@ -28,7 +26,6 @@
           
         </v-layout>
       </v-container>
-    </v-template>
 </template>
 
 <script>
@@ -45,9 +42,9 @@
     head: {
       script: [
         { 
-          src: '/froala-editor/js/froala_editor.min.js',
+          src: 'https://code.jquery.com/jquery-3.2.1.slim.min.js',
           type: 'text/javascript',
-          async: true
+         
         }
       ]
     }
