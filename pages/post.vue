@@ -42,7 +42,7 @@
     head: {
       script: [
         { 
-          src: 'https://code.jquery.com/jquery-3.2.1.slim.min.js',
+          src: '/js/showdown.min.js',
           type: 'text/javascript',
          
         }

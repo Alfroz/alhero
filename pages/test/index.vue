@@ -3,6 +3,7 @@
   <v-container
   fluid
   > 
+  <nuxt-link :to=" {name: 'test-id', params: {id: 123456} } "> Test Id 123456 </nuxt-link>
     <BaseLazyWrapper :loading="loading">
       <h2 class="display-2"> Hello Every one {{ isAuthenticated ? 'Login' : 'Logout' }}</h2>
     </BaseLazyWrapper> 
@@ -31,20 +32,6 @@ export default {
     return {
       test: '',
       loading: true,
-    }
-  },
-  async asyncData({ app, params, error }) {
-    const ref = firestore.collection('tests').doc('Sl08nS6hIIHZvsoSD5hX')
-
-    let snap
-    try {
-      snap = await ref.get()
-      //console.log(snap.data())
-    } catch (e) {
-      console.error(e)
-    }
-    return {
-      test: snap.data()
     }
   },
 

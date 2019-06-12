@@ -12,23 +12,7 @@
     components: {
       Editor
     },
-    head: {
-      script: [
-        { src: '/froala-editor/js/plugins.pkgd.min.js',
-          type: 'text/javascript',
-        }
-      ],
-      link: [
-        { rel: 'stylesheet', 
-          href: '/froala-editor/css/froala_editor.pkgd.min.css',
-          type: 'text/css'
-        },
-        { rel: 'stylesheet', 
-          href: '/froala-editor/css/themes/dark.min.css',
-          type: 'text/css'
-        }
-      ]   
-    },
+    
 
     async fetch({context, store, app, params, error}) {
       const currentSlug = params.slug;

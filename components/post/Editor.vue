@@ -1,5 +1,6 @@
 <template>
   <section>
+    
     <v-form ref="postEditor" v-model.lazy="valid" lazy-validation class="font-weight-light">
     <v-layout row wrap>
    <!--<h1 class="mb-5 title"><v-icon>notes</v-icon> {{ $route.params.slug ? 'Update' : 'Create' }} Post</h1>-->
@@ -15,8 +16,10 @@
       
       <v-flex xs12 sm12 md12>
         <div id="editor-wrapper" class="mb-5" style="min-height: 200px">
-          <div id="summernote"></div>
-        </div>
+          <no-ssr>
+            <vue-editor v-model="post.body" :editorOptions="editorSettings" :editorToolbar="customToolbar"></vue-editor>
+          </no-ssr>
+      </div>
 
       </v-flex>
       
@@ -59,6 +62,7 @@
 </template>
 
 <script>
+ if(process.client) var VueEditor = require('vue2-editor').VueEditor
 
 import { mapActions, mapGetters } from 'vuex'
 import { slugify } from '~/filters/slugify'
@@ -70,25 +74,19 @@ export default {
     slugify,
     tagify
   },
-
-  head: {
-    script: [
-      { 
-        src: '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js',
-        type: 'text/javascript',
-        body: true,
-        onload:
-            'var event = new Event("scriptLoad");document.dispatchEvent(event);'
-      }
-    ],
-    link: [
-      { rel: 'stylesheet', 
-        href: '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css',
-        type: 'text/css'
-      },
-    ]   
+  components: {
+    VueEditor
   },
 
+  head: {
+      link: [
+        { rel: 'stylesheet', 
+          href: '//cdn.quilljs.com/1.3.6/quill.bubble.css',
+          type: 'text/css'
+        }
+      ]   
+  },
+  
   props: {
     //post: Object,
     action: {
@@ -102,6 +100,14 @@ export default {
     return {
       valid: false,
       editor: false,
+      editorSettings: {
+        theme: 'bubble'
+      },
+      customToolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["image", "code-block"]
+      ],    
       titleRules: [
         v => !!v || 'Title is required',
         v => v && v.length >= 5 || 'Field must be grater than 5 characters'
@@ -118,16 +124,10 @@ export default {
     }
   }, // data
 
-  beforeMount() {
+ /* beforeMount() {
     document.addEventListener("scriptLoad", this.onScriptLoad, { passive: true });
-  },
+  },*/
 
-  mounted() { 
-   this.myEditor()
-  }, // mounted
-  updated() {
-
-  },
 
   watch: {
     tags(val) {
@@ -142,53 +142,10 @@ export default {
       'createPost',
       'updatePost'
     ]),
-    onScriptLoad() {
-      document.removeEventListener("scriptLoad", this.onScriptLoad);
-      console.log(window.summernote);
-      this.myEditor()
-    },
 
-     myEditor() {
-      if(!process.server && window.$) {
-        this.editor = $('#summernote').summernote({
-          airMode: true,
-          popover: {
-            air: [
-              ['color', ['color']],
-              ['font', ['bold', 'underline', 'clear']]
-            ]
-          },
-          placeholder: 'Hello stand alone ui',
-          tabsize: 2,
-          height: 100,
-          toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen', 'codeview', 'help']]
-          ]
-        });
-      }
-       
-        /*let that = this
-        this.editor =  new FroalaEditor('#froala-editor',{
-          theme: 'dark',
-          toolbarInline: true,
-          charCounterCount: false,
-          toolbarVisibleWithoutSelection: true,
-          events: {
-            'initialized': function () {
-            // Do something here.
-            // this is the editor instance.
-            console.info('Froala Initialized')
-            this.html.set(that.post.body)
-            }
-          }       
-        })*/
-      
+    marked(text) {
+     var converter =  showdown.Converter()
+     return converter.makeHtml(text);
     },
 
     async setPost() {
@@ -199,7 +156,7 @@ export default {
 
         await this[this.action] ({
             title: this.post.title || '',
-            body: this.editor.html.get(),
+            body: this.post.body,
 
            // body: this.post.body || '',
             slug: this.post.slug ? this.post.slug : slugify(this.post.title) + '-' + this.slugPrefix(),
