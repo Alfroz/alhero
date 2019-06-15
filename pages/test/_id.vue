@@ -41,8 +41,8 @@
   var Warning = require("@editorjs/warning");
   var Embed = require('@editorjs/embed');
   var CodeTool = require('@editorjs/code');
-  //var Image = require("@editorjs/image");
-  var SimpleImage = require("@editorjs/simple-image");
+  var Image = require("@editorjs/image");
+  //var SimpleImage = require("@editorjs/simple-image");
   var Marker = require('@editorjs/marker');
   var InlineCode = require('@editorjs/inline-code');
   var RawTool = require('@editorjs/raw');
@@ -53,7 +53,7 @@
 	export default {
 		name: 'Test-id',
     components: {
-      DynamicComponent: () => import('~/components/test/template/DynamicComponent')
+      DynamicComponent: () => import('~/components/blocks/template/DynamicComponent')
 
     },
 		data: () => ({
@@ -87,15 +87,33 @@
               ]
             }
           },
+          {
+            "type": "paragraph",
+            "data": 
+            {
+             "text": "&nbsp; The <code class=\"inline-code\">v-ripple</code> directive is used to show action from a user. It can be applied to any block level element. Numerous components come with the ripple directive built in, such as the <code class=\"inline-code\">v-btn</code><code class=\"inline-code\">v-tabs-item</code> and many more.&nbsp; for more info check <a href=\"http://vuetifyjs.com\">vuetify</a>"
+            }
+          },
+          {
+            "type" : "code",
+            "data" : {
+              "code": "drawView() {\n    let wrapper = document.createElement('div'),\n      textarea = document.createElement('textarea');\n\n    wrapper.classList.add(this.CSS.baseClass, this.CSS.wrapper);\n    textarea.classList.add(this.CSS.textarea, this.CSS.input);\n    textarea.textContent = this.data.code;\n\n    textarea.placeholder = this.placeholder;\n\n    wrapper.appendChild(textarea);\n\n    this.nodes.textarea = textarea;\n\n    return wrapper;\n  }"
+            }
+          },
+          {
+            "type": "warning",
+            "data": {
+              "title": "Note",
+              "message": "Avoid using this method just for lulz. It can be very dangerous <a href=\"http://google.com\">opposite your daily fun</a><b> stuff.</b>"
+            }
+          }
         ],
         "version": "2.13.0"
 
       }
 		}),
     computed: {
-      loader(typeComponent) {
-        return () => import(`../../components/test/template/${typeComponent}.vue`)
-      }
+      
     },
     methods: {
 
@@ -107,7 +125,7 @@
     },
     myEditor: function() {
       this.editor = new EditorJS({
-        holderId: "codex-editor",
+        holder: "codex-editor",
         autofocus: true,
         data: this.fakedata,
         /**
@@ -125,7 +143,8 @@
           inlineCode: InlineCode,
           raw: RawTool,
           list: {
-            class: List
+            class: List,
+            inlineToolbar: true,
           },
           paragraph: {
             class: Paragraph,
@@ -135,7 +154,7 @@
             }
           },
           image: {
-            class: SimpleImage,
+            class: Image,
             inlineToolbar: true,
             config: {
               placeholder: 'Paste image URL'

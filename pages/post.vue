@@ -40,13 +40,7 @@
 
     },
     head: {
-      script: [
-        { 
-          src: '/js/showdown.min.js',
-          type: 'text/javascript',
-         
-        }
-      ]
+      
     }
 
   }

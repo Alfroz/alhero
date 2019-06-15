@@ -1,9 +1,13 @@
 <template>
   <article>
     <h1 class="display-1 text-xs-center mb-3">{{ post.title }}</h1>
-    <v-container>
-    <div v-html="post.body"></div>
-    </v-container>
+      <template v-for="(block, i) in post.body.blocks">
+        <DynamicComponent
+          :componentName="block.type"
+          :data="block.data"
+          :key="i + block.type"
+           />
+      </template>
   </article>
 </template>
 
@@ -11,10 +15,12 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'PostDetails',
-  props: {
-  
+  props: {},
 
+  components: {
+    DynamicComponent: () => import('~/components/blocks/template/DynamicComponent')
   },
+
   async fetch({store, app, error, params}) {
    await store.dispatch('post/fetchPost', params.slug).catch(err => error({ statusCode: 404 }))
   },

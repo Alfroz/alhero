@@ -1,6 +1,6 @@
 <template>
   <section>
-    
+    <no-ssr placeholder=" Loading Editor ">
     <v-form ref="postEditor" v-model.lazy="valid" lazy-validation class="font-weight-light">
     <v-layout row wrap>
    <!--<h1 class="mb-5 title"><v-icon>notes</v-icon> {{ $route.params.slug ? 'Update' : 'Create' }} Post</h1>-->
@@ -14,13 +14,13 @@
         <v-textarea  v-model.lazy="post.body" :rules="bodyRules" placeholder="Write here" full-width rows="5" required></v-textarea>
       </v-flex>-->
       
-      <v-flex xs12 sm12 md12>
-        <div id="editor-wrapper" class="mb-5" style="min-height: 200px">
-          <no-ssr>
-            <vue-editor v-model="post.body" :editorOptions="editorSettings" :editorToolbar="customToolbar"></vue-editor>
-          </no-ssr>
-      </div>
-
+      <v-flex xs12>
+        <div class="editorx_body">
+          <!--editorjs id-->
+          
+            <div class id="codex-editor"></div>
+          
+        </div>
       </v-flex>
       
       
@@ -44,12 +44,10 @@
       </v-flex>
       
       <v-flex xs12 sm5>
-        <div v-if="post.featImage && validateImage(post.featImage)" row justify-center py-2 class="text-xs-center">
-          <no-ssr max-width="400px" max-height="400px">
+        <div v-if="post.featImage" row justify-center py-2 class="text-xs-center">
             <v-img :src="post.featImage"></v-img>
-          </no-ssr>
         </div>
-        <v-text-field v-model.lazy="post.featImage"  label="Featured image (optional)" placeholder="https://" box single-line></v-text-field>
+        <v-text-field v-model.lazy="post.featImage"  label="Featured image (optional)" placeholder="https://" box></v-text-field>
       </v-flex>
       
       
@@ -58,11 +56,25 @@
    
       </v-layout>
     </v-form>  
+    </no-ssr>
   </section>
 </template>
 
 <script>
- if(process.client) var VueEditor = require('vue2-editor').VueEditor
+ if(process.client) {
+  var EditorJS = require("@editorjs/editorjs");
+  var Header = require("@editorjs/header");
+  var Paragraph = require("@editorjs/paragraph");
+  var List = require("@editorjs/list");
+  var Warning = require("@editorjs/warning");
+  var Embed = require('@editorjs/embed');
+  var CodeTool = require('@editorjs/code');
+  var Image = require("@editorjs/image");
+  //var SimpleImage = require("@editorjs/simple-image");
+  var Marker = require('@editorjs/marker');
+  var InlineCode = require('@editorjs/inline-code');
+  var RawTool = require('@editorjs/raw');
+ }
 
 import { mapActions, mapGetters } from 'vuex'
 import { slugify } from '~/filters/slugify'
@@ -73,18 +85,6 @@ export default {
   filters: {
     slugify,
     tagify
-  },
-  components: {
-    VueEditor
-  },
-
-  head: {
-      link: [
-        { rel: 'stylesheet', 
-          href: '//cdn.quilljs.com/1.3.6/quill.bubble.css',
-          type: 'text/css'
-        }
-      ]   
   },
   
   props: {
@@ -99,15 +99,7 @@ export default {
   data() {
     return {
       valid: false,
-      editor: false,
-      editorSettings: {
-        theme: 'bubble'
-      },
-      customToolbar: [
-        ["bold", "italic", "underline"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        ["image", "code-block"]
-      ],    
+      editor: false, 
       titleRules: [
         v => !!v || 'Title is required',
         v => v && v.length >= 5 || 'Field must be grater than 5 characters'
@@ -124,9 +116,9 @@ export default {
     }
   }, // data
 
- /* beforeMount() {
-    document.addEventListener("scriptLoad", this.onScriptLoad, { passive: true });
-  },*/
+  mounted() {
+    this.myEditor();
+  },
 
 
   watch: {
@@ -143,24 +135,18 @@ export default {
       'updatePost'
     ]),
 
-    marked(text) {
-     var converter =  showdown.Converter()
-     return converter.makeHtml(text);
-    },
-
     async setPost() {
       if (this.$refs.postEditor.validate()) {
-
+       this.post.body = await this.editor.save()
+        
 
         //let action = slug ? this.updatePost : this.createPost;
 
         await this[this.action] ({
-            title: this.post.title || '',
+            title: this.post.title,
             body: this.post.body,
-
-           // body: this.post.body || '',
             slug: this.post.slug ? this.post.slug : slugify(this.post.title) + '-' + this.slugPrefix(),
-            featImage: this.post.featImage || null,
+            featImage: this.post.featImage || false,
             createdAt: this.post.createdAt || new Date().getTime(),
             updatedAt: new Date().getTime(),
             countViews: 0,
@@ -212,7 +198,7 @@ export default {
     },
     */
 
-    validateImage(url) {
+    /*validateImage(url) {
       if (url && process.client) {
         var img = new Image();
         img.src = url;
@@ -221,7 +207,7 @@ export default {
       } else {
         return true;
       }
-    }, 
+    },*/ 
 
     formatTags(v = false) {
       let x = this.post.tagsView;
@@ -231,6 +217,72 @@ export default {
       x = x.map(function(x) { return x.replace(/\s/g, '') })
       return x;
     },
+
+    
+    myEditor: function() {
+      this.editor = new EditorJS({
+        holder: "codex-editor",
+        autofocus: true,
+        data: this.post.body || '',
+        /**
+         * This Tool will be used as default
+         */
+        // initialBlock: "paragraph",
+        tools: {
+          header: {
+            class: Header,
+            inlineToolbar: ['link'],
+            shortcut: "CMD+SHIFT+H"
+          },
+          code: CodeTool,
+          marker: Marker,
+          inlineCode: InlineCode,
+          raw: RawTool,
+          list: {
+            class: List,
+            inlineToolbar: true,
+          },
+          paragraph: {
+            class: Paragraph,
+            inlineToolbar: true,
+            config: {
+              placeholder: "."
+            }
+          },
+          image: {
+            class: Image,
+            inlineToolbar: true,
+            config: {
+              placeholder: 'Paste image URL'
+            } 
+          },
+          warning: {
+            class: Warning,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+W',
+            config: {
+              titlePlaceholder: 'Title',
+              messagePlaceholder: 'Message',
+            },
+          },
+          embed: {
+            class: Embed,
+            config: {
+              services: {
+                youtube: true,
+                coub: true
+              }
+            }
+          },
+        },
+        onReady: function() {
+          
+        },
+        onChange: function() {
+         
+        }
+      });
+    }
 
 
   }, // methods

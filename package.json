@@ -19,10 +19,8 @@
     "firebase": "^5.11.0",
     "js-cookie": "^2.2.0",
     "jwt-decode": "^2.2.0",
-    "markdown-it": "^8.4.2",
     "nuxt": "^2.8.0",
     "vue-awesome": "^3.5.3",
-    "vue2-editor": "^2.7.2",
     "vuetify": "^1.5.5",
     "vuetify-loader": "^1.2.1"
   },

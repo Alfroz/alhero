@@ -31,7 +31,7 @@ export default {
   loading: {
     color: '#009688',
     failedColor: '#e91e63',
-    height: '3px',
+    height: '1vh',
     continuous: true,
   },
 
@@ -66,6 +66,11 @@ export default {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
   },
+
+  serverMiddleware: [
+    { path: '/api/test', handler: '~/api/test' }
+
+  ],
 
   /*
   ** Build configuration
