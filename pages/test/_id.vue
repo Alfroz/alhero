@@ -41,11 +41,11 @@
   var Warning = require("@editorjs/warning");
   var Embed = require('@editorjs/embed');
   var CodeTool = require('@editorjs/code');
-  var Image = require("@editorjs/image");
+  //var Image = require("@editorjs/image");
   //var SimpleImage = require("@editorjs/simple-image");
   var Marker = require('@editorjs/marker');
   var InlineCode = require('@editorjs/inline-code');
-  var RawTool = require('@editorjs/raw');
+  //var RawTool = require('@editorjs/raw');
 }
   // only import the icons you use to reduce bundle size
   import 'vue-awesome/icons/brands/vuejs'
@@ -153,13 +153,7 @@
               placeholder: "."
             }
           },
-          image: {
-            class: Image,
-            inlineToolbar: true,
-            config: {
-              placeholder: 'Paste image URL'
-            } 
-          },
+          
           warning: {
             class: Warning,
             inlineToolbar: true,
@@ -169,15 +163,7 @@
               messagePlaceholder: 'Message',
             },
           },
-          embed: {
-            class: Embed,
-            config: {
-              services: {
-                youtube: true,
-                coub: true
-              }
-            }
-          },
+          
         },
         onReady: function() {
           console.log("ready");
@@ -188,9 +174,9 @@
       });
     }
   },
-  mounted: function() {
-    this.myEditor();
-  }
+  mounted() {
+    this.myEditor()
+   }
 
 	}
 </script>

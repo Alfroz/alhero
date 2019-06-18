@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container class="mx-2">
 		<p v-html="data.text"></p>
 	</v-container>
 </template>

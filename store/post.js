@@ -187,6 +187,23 @@ export const actions = {
     
   }, // fetchPost
 
+  // Validating Imageby Url
+
+  async validateImage(url) {
+    if (url && process.client) {
+      var img = new Image();
+      img.src = url;
+      //  console.log(!!img.naturalWidth)
+      if(img.naturalWidth) {
+        console.log('New Image' + JSON.stringify(img))
+        img.url = url
+        return img;
+      } else {
+      return false;
+      }
+    }
+  },
+
 }
 
 // =================================================

@@ -1,17 +1,9 @@
 <template>
 	<section>
-    <v-btn
-      v-if="responsive"
-      class="default v-btn--simple"
-      dark
-      icon
-      @click.stop="sidebar = !sidebar"
-      >
-      <v-icon>{{sidebar ? 'fas fa-angle-double-left' : 'fas fa-stream'}}</v-icon>
-    </v-btn>
+    
     <v-navigation-drawer
       id="app-drawer"
-      v-model="sidebar"
+      v-model="drawer"
       app
       dark
       persistent
@@ -33,6 +25,7 @@
 </template>
 
 <script>
+  import { mapState, mapMutations } from 'vuex'
   import NavBarRoutes from '~/components/nav-bar-routes'
 	export default {
 		name: 'PostLeftSideBar',
@@ -40,10 +33,8 @@
       NavBarRoutes
     },
     data: () => ({
-      sidebar: null,
       responsive: false,
       background:'',
-
       persistentNavRoutes: [
         {
           to: {name: 'post'},
@@ -67,15 +58,33 @@
       
     }),
 
-    mounted () {
-    this.onResponsiveInverted()
-    window.addEventListener('resize', this.onResponsiveInverted)
+    computed: {
+      ...mapState('app', ['hasLeftSidebar', 'leftSidebar']),
+
+       drawer: {
+        get() {
+          return this.leftSidebar
+        },
+        set(val) {
+          this.SET_LEFTSIDEBAR(val)
+        }
+       },
+
     },
+
+    mounted () {
+      this.HAS_LEFTSIDEBAR(true)
+
+      this.onResponsiveInverted()
+      window.addEventListener('resize', this.onResponsiveInverted)
+      },
     beforeDestroy () {
+      this.HAS_LEFTSIDEBAR(false)
       window.removeEventListener('resize', this.onResponsiveInverted)
     },
+
     methods: {
-      
+      ...mapMutations('app', ['HAS_LEFTSIDEBAR', 'SET_LEFTSIDEBAR']),
       onResponsiveInverted () {
         if (window.innerWidth < 600) {
           this.responsive = true

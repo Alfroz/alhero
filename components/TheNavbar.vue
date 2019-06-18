@@ -41,6 +41,18 @@
     dense
     clipped-left
     class="accent">
+    <template v-if="hasLeftSidebar">
+      <v-btn
+        v-if="responsive"
+        class="default v-btn--simple"
+        dark
+        icon
+        @click.stop="SET_LEFTSIDEBAR"
+        >
+        <v-icon left>fas fa-angle-double-right</v-icon>
+      </v-btn>
+    </template>
+
       <v-toolbar-title 
       color="transparent"
       class="ma-0 pa-0">
@@ -65,6 +77,7 @@
 
 <script>
 import NavBarRoutes from './nav-bar-routes'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'NavBar',
@@ -74,6 +87,7 @@ export default {
   data() {
     return {
       drawer: null,
+      responsive: false,
       mini: false,
       persistentNavRoutes: [
         {
@@ -97,6 +111,33 @@ export default {
         },
       ]
     }
-  }
+  },
+  computed: {
+    ...mapState ('app',
+      ['hasLeftSidebar', 'leftSidebar']),
+  },
+
+  methods: {
+    ...mapMutations('app',['SET_LEFTSIDEBAR']),
+
+    onResponsiveInverted () {
+      if (window.innerWidth < 600) {
+        this.responsive = true
+      } else {
+        this.responsive = false
+      }
+    },
+
+  },
+
+  mounted () {
+    this.onResponsiveInverted()
+
+    window.addEventListener('resize', this.onResponsiveInverted)
+    },
+
+  beforeDestroy () {
+    window.removeEventListener('resize', this.onResponsiveInverted)
+  },
 }
 </script>

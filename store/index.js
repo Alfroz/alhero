@@ -5,7 +5,7 @@ export const strict = false;
 // State
 // =================================================
 export const state = () => ({
-	snackbar: {}
+	snackbar: {},
 })
 
 
