@@ -141,7 +141,7 @@
           code: CodeTool,
           marker: Marker,
           inlineCode: InlineCode,
-          raw: RawTool,
+          //raw: RawTool,
           list: {
             class: List,
             inlineToolbar: true,
